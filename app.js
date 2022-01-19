@@ -1,5 +1,6 @@
 const http = require('http');
 
+const {getReqData} = require("./utils");
 const Todo = require("./controller");
 
 const PORT = 5000;
@@ -33,7 +34,13 @@ const server = http.createServer(async (req,res) => {
             res.writeHead(404, {"Content-Type": "application/json"});
             res.end(JSON.stringify({message:error}));
             }
+        case(req.url === '/api/todos' && req.method === "POST"):
+            let todoData = await getReqData(req);
+            let createdTodo = await new Todo().createTodo(JSON.parse(todoData));
+            res.writeHead(200, {"Content-Type": "application/json"});
+            res.end(JSON.stringify(createdTodo));
 
+            break;
     }
 
 });
