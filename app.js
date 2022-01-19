@@ -1,5 +1,7 @@
 const http = require('http');
 
+const Todo = require("./controller");
+
 const PORT = 5000;
 
 const server = http.createServer(async (req,res) => {
@@ -14,6 +16,14 @@ const server = http.createServer(async (req,res) => {
 
             res.end();
             break;
+        case (req.url === '/api/todos' && req.method ==="GET"):
+            // response header
+            const todos = await new Todo().listTodos();
+            res.writeHead(200, {"Content-Type": "application/json"});
+            res.end(JSON.stringify(todos));
+            break;
+
+
     }
 
 });
